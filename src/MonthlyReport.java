@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import  java.util.Scanner;
 
 public class MonthlyReport {
     HashMap<Integer, Double> monthExpenses = new HashMap<>();
     HashMap<Integer, Double> monthIncome = new HashMap<>();
+
     /**
      * Метод для сохранения всех расходов помесячно
      */
@@ -12,14 +12,13 @@ public class MonthlyReport {
 
         HashMap<Integer, Double> monthlyExpenses = new HashMap<>();
         for (int month : monthlyReport.keySet()) {
-            double expens = 0;
+            double expense = 0;
             ArrayList<String[]> monthlyData = monthlyReport.get(month);
-            for (int i= 0; i<monthlyData.size(); i++) {
-                String[] currentData = monthlyData.get(i);
-                if (currentData[1].equals("TRUE")) {
-                    expens += Double.parseDouble(currentData[2]) * Double.parseDouble(currentData[3]);
+            for (int i= 1; i<monthlyData.size(); i++) {
+                if (monthlyData.get(i)[1].equals("TRUE")) {
+                    expense += Double.parseDouble(monthlyData.get(i)[2]) * Double.parseDouble(monthlyData.get(i)[3]);
                 }
-                monthlyExpenses.put(month, expens);
+                monthlyExpenses.put(month, expense);
             }
         }
         return monthlyExpenses;
@@ -35,10 +34,9 @@ public class MonthlyReport {
         for (int month : monthlyReport.keySet()) {
             double income = 0;
             ArrayList<String[]> monthlyData = monthlyReport.get(month);
-            for (int i= 0; i<monthlyData.size(); i++) {
-                String[] currentData = monthlyData.get(i);
-                if (currentData[1].equals("FALSE")) {
-                    income += Double.parseDouble(currentData[2]) * Double.parseDouble(currentData[3]);
+            for (int i= 1; i<monthlyData.size(); i++) {
+                if (monthlyData.get(i)[1].equals("FALSE")) {
+                    income += Double.parseDouble(monthlyData.get(i)[2]) * Double.parseDouble(monthlyData.get(i)[3]);
                 }
                 monthlyIncome.put(month, income);
             }
@@ -47,11 +45,41 @@ public class MonthlyReport {
     }
 
     /**
-     * Метод для нахождения самого прибыльного товара
+     * Метод для вывода отчета помесячно
      */
+
     void printMonthReport(HashMap<Integer, ArrayList<String[]>> monthlyReport) {
+        for (int month : monthlyReport.keySet()) {
+            String[] mostProfitable = findMostProfitable(monthlyReport, month);
+            System.out.println("Месяц " + Menu.getNameOfMonth(month));
+            System.out.println(
+                    "Самый прибыльный товар: " + mostProfitable[0] +
+                    "\nПрибыль составила: " + mostProfitable[1] + " рублей.");
+            getMaxExpenseReport(monthlyReport, month);
+            System.out.println("");
+        }
     }
 
+    /**
+     * Метод для нахождения самого прибыльного товара
+     */
+    String[] findMostProfitable(HashMap<Integer, ArrayList<String[]>> monthlyReport, int month) {
+        String nameOfMostProfitable = "";
+        String valueOfMostProfitable = "0";
+        ArrayList<String[]> monthlyData = monthlyReport.get(month);
+        for (int i= 0; i<monthlyData.size(); i++) {
+            String[] currentData = monthlyData.get(i);
+            if (currentData[1].equals("FALSE")) {
+                Double expense = Double.parseDouble(currentData[2]) * Double.parseDouble(currentData[3]);
+                if (Double.parseDouble(valueOfMostProfitable) < expense) {
+                    nameOfMostProfitable = currentData[0];
+                    valueOfMostProfitable = expense.toString();
+                }
+            }
+        }
+        String[] answer = {nameOfMostProfitable, valueOfMostProfitable};
+        return answer;
+    }
 
     /**
      * Метод для поиска самой большой траты
@@ -68,6 +96,6 @@ public class MonthlyReport {
                 }
             }
         }
-        System.out.printf("Максимальная тратта за %2d составила %2f рублей.", month, maxExpense);
+        System.out.printf("Максимальная тратта за" + Menu.getNameOfMonth(month) +  "составила %.1f рублей.", maxExpense);
     }
 }
