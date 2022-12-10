@@ -33,26 +33,24 @@ public class Menu {
 
             if (userInput == 1) { // 1. Считать все месячные отчёты
                 String fileName;
-                ArrayList<String[]> newFile;
                 for (int i =1; i <= availableMonth; i++) {
                     fileName = String.format("m.2020%02d.csv", i);
-                    newFile = fileReader.readAndReformFiles(fileName);
+                    ArrayList<String[]> newFile = fileReader.readAndReformFiles(fileName);
                     if (!newFile.isEmpty()) {
-                    monthlyStatement.put((i), newFile);
+                        monthlyStatement.put((i), newFile);
                     }
                 }
                 if (!monthlyStatement.isEmpty()) {
                     isMonthStatementRead = true;
-                    System.out.println("Месячные отчеты списаны.");
+                    System.out.println("Месячные отчеты считаны.");
                 }
             } else if (userInput == 2) { // 2. Считать годовой отчёт
                 String fileName;
-                ArrayList<String[]> newFile;
                 for (int i = firstAvailableYear; i <= (firstAvailableYear + availableYears - 1); i++) {
                     fileName = String.format("y.%d.csv", i);
-                    newFile = fileReader.readAndReformFiles(fileName);
+                    ArrayList<String[]> newFile = fileReader.readAndReformFiles(fileName);
                     if (!newFile.isEmpty()) {
-                    yearlyStatement.put((i), newFile);
+                        yearlyStatement.put((i), newFile);
                     }
                 }
                 if (!yearlyStatement.isEmpty()) {
