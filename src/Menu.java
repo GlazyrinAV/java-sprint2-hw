@@ -12,7 +12,6 @@ import java.util.InputMismatchException;
  * monthlyStatement - сводный первоначальный ежемесячный отчет
  * yearlyStatement - сводный первоначальный ежегодный отчет
  */
-
 public class Menu {
     public static void main(String[] args) {
         boolean isMonthStatementRead = false;
@@ -26,6 +25,7 @@ public class Menu {
         FileReader fileReader = new FileReader();
         MonthlyReport monthlyReport = new MonthlyReport();
         YearlyReport yearlyReport = new YearlyReport();
+        ReportComparator reportComparator = new ReportComparator();
 
         while (true) {
             printMenu();
@@ -33,26 +33,24 @@ public class Menu {
 
             if (userInput == 1) { // 1. Считать все месячные отчёты
                 String fileName;
-                ArrayList<String[]> newFile;
                 for (int i =1; i <= availableMonth; i++) {
                     fileName = String.format("m.2020%02d.csv", i);
-                    newFile = fileReader.readAndReformFiles(fileName);
+                    ArrayList<String[]> newFile = fileReader.readAndReformFiles(fileName);
                     if (!newFile.isEmpty()) {
-                    monthlyStatement.put((i), newFile);
+                        monthlyStatement.put((i), newFile);
                     }
                 }
                 if (!monthlyStatement.isEmpty()) {
                     isMonthStatementRead = true;
-                    System.out.println("Месячные отчеты списаны.");
+                    System.out.println("Месячные отчеты считаны.");
                 }
             } else if (userInput == 2) { // 2. Считать годовой отчёт
                 String fileName;
-                ArrayList<String[]> newFile;
                 for (int i = firstAvailableYear; i <= (firstAvailableYear + availableYears - 1); i++) {
                     fileName = String.format("y.%d.csv", i);
-                    newFile = fileReader.readAndReformFiles(fileName);
+                    ArrayList<String[]> newFile = fileReader.readAndReformFiles(fileName);
                     if (!newFile.isEmpty()) {
-                    yearlyStatement.put((i), newFile);
+                        yearlyStatement.put((i), newFile);
                     }
                 }
                 if (!yearlyStatement.isEmpty()) {
@@ -62,36 +60,7 @@ public class Menu {
             } else if (userInput == 3) { // 3. Сверить отчёты
                 System.out.println("Начата проверка отчетов.");
                 if (isMonthStatementRead && isYearlyStatementRead) {
-                    monthlyReport.monthExpenses = monthlyReport.saveMonthExpenses(monthlyStatement);
-                    monthlyReport.monthIncome = monthlyReport.saveMonthIncome(monthlyStatement);
-                    yearlyReport.yearlyExpenses = yearlyReport.saveYearlyExpenses(yearlyStatement);
-                    yearlyReport.yearlyIncome = yearlyReport.saveYearlyIncome(yearlyStatement);
-                    boolean isExpensesCheck = false;
-                    boolean isIncomeCheck = false;
-
-                    for (int month : monthlyReport.monthExpenses.keySet()) {
-                        int errors = 0;
-                        if (monthlyReport.monthExpenses.get(month) != yearlyReport.yearlyExpenses.get(month)) {
-                            System.out.println("Обнаружена ошибка в расходах за " + (month+1) + " месяц");
-                            errors++;
-                        }
-                        if (errors == 0) {
-                            isExpensesCheck = true;
-                        }
-                    }
-                    for (int month : monthlyReport.monthIncome.keySet()) {
-                        int errors = 0;
-                        if (monthlyReport.monthIncome.get(month) != yearlyReport.yearlyIncome.get(month)) {
-                            System.out.println("Обнаружена ошибка в доходах за " + (month+1) + " месяц");
-                            errors++;
-                        }
-                        if (errors == 0) {
-                            isIncomeCheck = true;
-                        }
-                    }
-                    if (isExpensesCheck && isIncomeCheck) {
-                        System.out.println("Проверка отчетов завершена. Ошибок нет.");
-                    }
+                    reportComparator.compareMonthYearRports(monthlyStatement, yearlyStatement);//
                 } else if (!isMonthStatementRead && !isYearlyStatementRead) {
                     System.out.println("Ежемесячные и годовые отчеты не считаны. Сначала считайте их.");
                 } else if (!isYearlyStatementRead) {
@@ -115,7 +84,6 @@ public class Menu {
     /**
      * Метод печатает меню
      */
-
     private static void printMenu() {
         System.out.println(
                 "\nВведите, пожалуйста, номер комманды:\n" +
@@ -131,7 +99,6 @@ public class Menu {
      * Метод для получения названия месяца
      * Возвращает название месяца в виде текста
      */
-
     static String getNameOfMonth(int numberOfMonth) {
         String nameOfMonth = "";
         switch (numberOfMonth) {

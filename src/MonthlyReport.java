@@ -21,6 +21,7 @@ public class MonthlyReport {
                 monthlyExpenses.put(month, expense);
             }
         }
+        System.out.println(monthlyExpenses);
         return monthlyExpenses;
     }
 
@@ -47,7 +48,6 @@ public class MonthlyReport {
     /**
      * Метод для вывода отчета помесячно
      */
-
     void printMonthReport(HashMap<Integer, ArrayList<String[]>> monthlyReport) {
         for (int month : monthlyReport.keySet()) {
             String[] mostProfitable = findMostProfitable(monthlyReport, month);

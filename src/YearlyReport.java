@@ -20,9 +20,9 @@ public class YearlyReport {
                 yearlyExpenses.put(Integer.parseInt(yearlyData.get(i)[0]), expense);
             }
         }
+        System.out.println(yearlyExpenses);
         return yearlyExpenses;
     }
-
 
     /**
      * Метод для сохранения всех доходов помесячно
@@ -57,7 +57,6 @@ public class YearlyReport {
     /**
      * Метод для сохранения прибыли
      */
-
     void printNetProfitByMonth(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
         double netProfit = 0;
         HashMap<Integer, Double> expenseData = saveYearlyExpenses(yearlyReport);
