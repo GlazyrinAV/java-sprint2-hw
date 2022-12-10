@@ -5,24 +5,19 @@ public class YearlyReport {
     HashMap<Integer, Double> yearlyExpenses = new HashMap<>();
     HashMap<Integer, Double> yearlyIncome = new HashMap<>();
 
-
     /**
      * Метод для сохранения всех расходов помесячно
      */
     HashMap<Integer, Double> saveYearlyExpenses(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
-
         HashMap<Integer, Double> yearlyExpenses = new HashMap<>();
-        ArrayList<String[]> yearlyData;
-        String[] currentData;
-        for (int month : yearlyReport.keySet()) {
+        for (int year : yearlyReport.keySet()) {
             double expens = 0;
-            yearlyData = yearlyReport.get(month);
-            for (int i= 0; i<yearlyData.size(); i++) {
-                currentData = yearlyData.get(i);
-                if (currentData[2].equals("TRUE")) {
-                    expens = Double.parseDouble(currentData[1]);
+            ArrayList<String[]> yearlyData = yearlyReport.get(year);
+            for (int i= 1; i<yearlyData.size(); i++) {
+                if ((yearlyData.get(i))[2].equals("true")) {
+                    expens = Double.parseDouble(yearlyData.get(i)[1]);
                 }
-                yearlyExpenses.put(month, expens);
+                yearlyExpenses.put(Integer.parseInt(yearlyData.get(i)[0]), expens);
             }
         }
         return yearlyExpenses;
@@ -33,35 +28,56 @@ public class YearlyReport {
      * Метод для сохранения всех доходов помесячно
      */
     HashMap<Integer, Double> saveYearlyIncome(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
-
-        HashMap<Integer, Double> yearlyExpenses = new HashMap<>();
-        ArrayList<String[]> yearlyData;
-        String[] currentData;
-        for (int month : yearlyReport.keySet()) {
+        HashMap<Integer, Double> yearlyIncome = new HashMap<>();
+        for (int year : yearlyReport.keySet()) {
             double income = 0;
-            yearlyData = yearlyReport.get(month);
-            for (int i= 0; i<yearlyData.size(); i++) {
-                currentData = yearlyData.get(i);
-                if (currentData[2].equals("FALSE")) {
-                    income = Double.parseDouble(currentData[1]);
+            ArrayList<String[]> yearlyData = yearlyReport.get(year);
+            for (int i= 1; i<yearlyData.size(); i++) {
+                if (yearlyData.get(i)[2].equals("false")) {
+                    income = Double.parseDouble(yearlyData.get(i)[1]);
                 }
-                yearlyExpenses.put(month, income);
+                yearlyIncome.put(Integer.parseInt(yearlyData.get(i)[0]), income);
             }
         }
-        return yearlyExpenses;
+        return yearlyIncome;
     }
 
+    /**
+     * Метод для печати годового отчета
+     */
+    void printYearlyReport(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
+        for (int year : yearlyReport.keySet()) {
+            System.out.println(year);
+            printNetProfitByMonth(yearlyReport);
+            System.out.printf("\nСредние доходы составили: %.1f рублей.", getAverage(saveYearlyIncome(yearlyReport)));
+            System.out.printf("\nСредние расходы составили: %.1f рублей.\n", getAverage(saveYearlyExpenses(yearlyReport)));
+        }
+    }
 
     /**
      * Метод для сохранения прибыли
      */
 
-
+    void printNetProfitByMonth(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
+        double netProfit = 0;
+        HashMap<Integer, Double> expenseData = saveYearlyExpenses(yearlyReport);
+        HashMap<Integer, Double> incomeData = saveYearlyIncome(yearlyReport);
+        for (int i = 1; i <= expenseData.size(); i++) {
+            netProfit = incomeData.get(i) - expenseData.get(i);
+            System.out.println("Чистая прибыль за " + Menu.getNameOfMonth(i) + " составила: " + netProfit + " рублей.");
+        }
+    }
 
     /**
      * Метод для поиска средних доходов или расходов
      */
-    void printYearlyReport(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
+    double getAverage(HashMap<Integer, Double> data) {
+        double average;
+        double sum = 0;
+        for (int i =1; i <= data.size(); i++) {
+            sum += data.get(i);
+        }
+        average = sum / (data.size()-1);
+        return average;
     }
-
 }

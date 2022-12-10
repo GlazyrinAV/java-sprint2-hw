@@ -14,12 +14,15 @@ public class FileReader {
     ArrayList<String[]> readAndReformFiles (String path) {
         List<String> dataFromFile = readFileContents(path);
         ArrayList<String[]> formatedData = new ArrayList<>();
-        for (int i = 1; i < dataFromFile.size(); i++) {
-            String line = dataFromFile.get(i);
-            String[] lineContents = line.split(",");
-            formatedData.add(lineContents);
-        }
+        if (!dataFromFile.isEmpty()) {
+            for (String s : dataFromFile) {
+                String[] lineContent = s.split(",");
+                formatedData.add(lineContent);
+            }
         return formatedData;
+        } else {
+            return formatedData;
+        }
     }
 
     /**
