@@ -6,6 +6,23 @@ public class YearlyReport {
     HashMap<Integer, Double> yearlyIncome = new HashMap<>();
 
     /**
+     *  Метод для чтения ежегодных отчетов
+     *  Возвращает хэш таблицу с данными ежемесячных отчетов в String
+     */
+    HashMap<Integer, ArrayList<String[]>> readYearlyReport(int firstAvailableYear, int availableYears) {
+        HashMap<Integer, ArrayList<String[]>> yearlyStatement= new HashMap<>();
+        String fileName;
+        for (int i = firstAvailableYear; i <= (firstAvailableYear + availableYears - 1); i++) {
+            fileName = String.format("y.%d.csv", i);
+            ArrayList<String[]> newFile = FileReader.readAndReformFiles(fileName);
+            if (!newFile.isEmpty()) {
+                yearlyStatement.put((i), newFile);
+            }
+        }
+        return  yearlyStatement;
+    }
+
+    /**
      * Метод для сохранения всех расходов помесячно
      */
     HashMap<Integer, Double> saveYearlyExpenses(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
@@ -62,7 +79,7 @@ public class YearlyReport {
         HashMap<Integer, Double> incomeData = saveYearlyIncome(yearlyReport);
         for (int i = 1; i <= expenseData.size(); i++) {
             netProfit = incomeData.get(i) - expenseData.get(i);
-            System.out.println("Чистая прибыль за " + SuppurtFunctions.getNameOfMonth(i) + " составила: " + netProfit + " рублей.");
+            System.out.println("Чистая прибыль за " + SupportFunctions.getNameOfMonth(i) + " составила: " + netProfit + " рублей.");
         }
     }
 

@@ -1,7 +1,7 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class SuppurtFunctions {
+public class SupportFunctions {
     /**
      * Метод для получения названия месяца
      * Возвращает название месяца в виде текста
