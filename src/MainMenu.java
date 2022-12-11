@@ -56,7 +56,7 @@ public class MainMenu {
             } else if (userInput == 3) { // 3. Сверить отчёты
                 System.out.println("Начата проверка отчетов.");
                 if (isMonthStatementRead && isYearlyStatementRead) {
-                    reportComparator.compareMonthYearRеports(monthlyStatement, yearlyStatement);//
+                    reportComparator.compareMonthYearReports(monthlyStatement, yearlyStatement);//
                 } else if (!isMonthStatementRead && !isYearlyStatementRead) {
                     System.out.println("Ежемесячные и годовые отчеты не считаны. Сначала считайте их.");
                 } else if (!isYearlyStatementRead) {

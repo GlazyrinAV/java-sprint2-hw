@@ -18,7 +18,7 @@ public class ReportComparator {
      * Метод для сверки ежемесячных и годовых отчетов.
      * Сравнение идет, исходя из количества предоставленных месяцев.
      */
-    void compareMonthYearRеports(HashMap<Integer, ArrayList<String[]>> monthlyStatement, HashMap<Integer, ArrayList<String[]>> yearlyStatement) {
+    void compareMonthYearReports(HashMap<Integer, ArrayList<String[]>> monthlyStatement, HashMap<Integer, ArrayList<String[]>> yearlyStatement) {
         monthlyReport.monthExpenses = monthlyReport.saveMonthExpenses(monthlyStatement);
         monthlyReport.monthIncome = monthlyReport.saveMonthIncome(monthlyStatement);
         yearlyReport.yearlyExpenses = yearlyReport.saveYearlyExpenses(yearlyStatement);
