@@ -21,7 +21,6 @@ public class MonthlyReport {
                 monthlyExpenses.put(month, expense);
             }
         }
-        System.out.println(monthlyExpenses);
         return monthlyExpenses;
     }
 
@@ -51,7 +50,7 @@ public class MonthlyReport {
     void printMonthReport(HashMap<Integer, ArrayList<String[]>> monthlyReport) {
         for (int month : monthlyReport.keySet()) {
             String[] mostProfitable = findMostProfitable(monthlyReport, month);
-            System.out.println("Месяц " + Menu.getNameOfMonth(month));
+            System.out.println("Месяц " + SuppurtFunctions.getNameOfMonth(month));
             System.out.println(
                     "Самый прибыльный товар: " + mostProfitable[0] +
                     "\nПрибыль составила: " + mostProfitable[1] + " рублей.");
@@ -96,6 +95,6 @@ public class MonthlyReport {
                 }
             }
         }
-        System.out.printf("Максимальная тратта за" + Menu.getNameOfMonth(month) +  "составила %.1f рублей.", maxExpense);
+        System.out.printf("Максимальная тратта за" + SuppurtFunctions.getNameOfMonth(month) +  "составила %.1f рублей.", maxExpense);
     }
 }

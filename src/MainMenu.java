@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.InputMismatchException;
 
 /**
  * isMonthStatementRead - Проверка на чтение из файла ежемесячных отчетов
@@ -12,7 +11,7 @@ import java.util.InputMismatchException;
  * monthlyStatement - сводный первоначальный ежемесячный отчет
  * yearlyStatement - сводный первоначальный ежегодный отчет
  */
-public class Menu {
+public class MainMenu {
     public static void main(String[] args) {
         boolean isMonthStatementRead = false;
         boolean isYearlyStatementRead = false;
@@ -29,7 +28,7 @@ public class Menu {
 
         while (true) {
             printMenu();
-            int userInput = getCommand(scanner);
+            int userInput = SuppurtFunctions.getCommand(scanner);
 
             if (userInput == 1) { // 1. Считать все месячные отчёты
                 String fileName;
@@ -93,69 +92,5 @@ public class Menu {
                 "4. Вывести информацию о всех месячных отчётах\n" +
                 "5. Вывести информацию о годовом отчёте\n" +
                 "0. Выйти из приложения.");
-    }
-
-    /**
-     * Метод для получения названия месяца
-     * Возвращает название месяца в виде текста
-     */
-    static String getNameOfMonth(int numberOfMonth) {
-        String nameOfMonth = "";
-        switch (numberOfMonth) {
-            case (1):
-                nameOfMonth = "Январь";
-                break;
-            case (2):
-                nameOfMonth = "Февраль";
-                break;
-            case (3):
-                nameOfMonth = "Март";
-                break;
-            case (4):
-                nameOfMonth = "Апрель";
-                break;
-            case (5):
-                nameOfMonth = "Май";
-                break;
-            case (6):
-                nameOfMonth = "Июнь";
-                break;
-            case (7):
-                nameOfMonth = "Июль";
-                break;
-            case (8):
-                nameOfMonth = "Август";
-                break;
-            case (9):
-                nameOfMonth = "Сентябрь";
-                break;
-            case (10):
-                nameOfMonth = "Октябрь";
-                break;
-            case (11):
-                nameOfMonth = "Ноябрь";
-                break;
-            case (12):
-                nameOfMonth = "Декабрь";
-                break;
-        }
-        return nameOfMonth;
-    }
-
-    /**
-     * Метод для ввода комманды пользователя.
-     * Если вводится недопустимый символ (буква, символ и т.п.) - выводится ошибка
-     * и запрашивается повторный ввод.
-     */
-    static int getCommand(Scanner scanner) {
-        int userCommand;
-        try {
-            userCommand = scanner.nextInt();
-            return userCommand;
-        } catch (InputMismatchException e) {
-            System.out.println("Введн недопустимый символ. Введите число.");
-            scanner.nextLine();
-        }
-        return getCommand(scanner);
     }
 }
