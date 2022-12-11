@@ -11,7 +11,7 @@ public class FileReader {
      * с массивом строк, которые содержат даннеые из файла.
      * Возвращает Список.
      */
-    ArrayList<String[]> readAndReformFiles (String path) {
+    static ArrayList<String[]> readAndReformFiles (String path) {
         List<String> dataFromFile = readFileContents(path);
         ArrayList<String[]> formattedData = new ArrayList<>();
         if (!dataFromFile.isEmpty()) {
@@ -30,7 +30,7 @@ public class FileReader {
      * из файла. Используется в методе readAndReformFiles.
      * Возвращает Лист.
      */
-    List<String> readFileContents(String path) {
+    static List<String> readFileContents(String path) {
         try {
             return Files.readAllLines(Path.of(path));
         } catch (IOException e) {

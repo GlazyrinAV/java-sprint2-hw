@@ -20,7 +20,6 @@ public class YearlyReport {
                 yearlyExpenses.put(Integer.parseInt(yearlyData.get(i)[0]), expense);
             }
         }
-        System.out.println(yearlyExpenses);
         return yearlyExpenses;
     }
 
@@ -63,7 +62,7 @@ public class YearlyReport {
         HashMap<Integer, Double> incomeData = saveYearlyIncome(yearlyReport);
         for (int i = 1; i <= expenseData.size(); i++) {
             netProfit = incomeData.get(i) - expenseData.get(i);
-            System.out.println("Чистая прибыль за " + Menu.getNameOfMonth(i) + " составила: " + netProfit + " рублей.");
+            System.out.println("Чистая прибыль за " + SuppurtFunctions.getNameOfMonth(i) + " составила: " + netProfit + " рублей.");
         }
     }
 

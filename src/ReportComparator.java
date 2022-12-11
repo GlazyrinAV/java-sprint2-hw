@@ -2,14 +2,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ReportComparator {
+    MonthlyReport monthlyReport;
+    YearlyReport yearlyReport;
+
+    /**
+     * Конструктор для сверки отчетов.
+     * Принимает объекты Ежемесячный и Годовой отчет.
+     */
+    public ReportComparator(MonthlyReport monthlyReport, YearlyReport yearlyReport) {
+        this.monthlyReport = monthlyReport;
+        this.yearlyReport = yearlyReport;
+    }
+
     /**
      * Метод для сверки ежемесячных и годовых отчетов.
      * Сравнение идет, исходя из количества предоставленных месяцев.
      */
-    void compareMonthYearRports(HashMap<Integer, ArrayList<String[]>> monthlyStatement, HashMap<Integer, ArrayList<String[]>> yearlyStatement) {
-        MonthlyReport monthlyReport = new MonthlyReport();
-        YearlyReport yearlyReport = new YearlyReport();
-
+    void compareMonthYearRеports(HashMap<Integer, ArrayList<String[]>> monthlyStatement, HashMap<Integer, ArrayList<String[]>> yearlyStatement) {
         monthlyReport.monthExpenses = monthlyReport.saveMonthExpenses(monthlyStatement);
         monthlyReport.monthIncome = monthlyReport.saveMonthIncome(monthlyStatement);
         yearlyReport.yearlyExpenses = yearlyReport.saveYearlyExpenses(yearlyStatement);
