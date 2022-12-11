@@ -28,22 +28,22 @@ public class ReportComparator {
         boolean isIncomeCheck = false;
 
         for (int month : monthlyReport.monthExpenses.keySet()) {
-            int errors = 0;
+            boolean isError = false;
             if (!monthlyReport.monthExpenses.get(month).equals(yearlyReport.yearlyExpenses.get(month))) {
                 System.out.println("Обнаружена ошибка в расходах за " + (month) + " месяц");
-                errors++;
+                isError = true;
             }
-            if (errors == 0) {
+            if (!isError) {
                 isExpensesCheck = true;
             }
         }
         for (int month : monthlyReport.monthIncome.keySet()) {
-            int errors = 0;
+            boolean isError = false;
             if (!monthlyReport.monthIncome.get(month).equals(yearlyReport.yearlyIncome.get(month))) {
                 System.out.println("Обнаружена ошибка в доходах за " + (month) + " месяц");
-                errors++;
+                isError = true;
             }
-            if (errors == 0) {
+            if (!isError) {
                 isIncomeCheck = true;
             }
         }
