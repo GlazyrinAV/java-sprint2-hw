@@ -6,10 +6,26 @@ public class MonthlyReport {
     HashMap<Integer, Double> monthIncome = new HashMap<>();
 
     /**
+     *  Метод для чтения ежемесячных отчетов
+     *  Возвращает хэш таблицу с данными ежемесячных отчетов в String
+     */
+    HashMap<Integer, ArrayList<String[]>> readMonthReport(int availableMonth) {
+        HashMap<Integer, ArrayList<String[]>> monthlyStatement = new HashMap<>();
+        String fileName;
+        for (int i =1; i <= availableMonth; i++) {
+            fileName = String.format("m.2020%02d.csv", i);
+            ArrayList<String[]> newFile = FileReader.readAndReformFiles(fileName);
+            if (!newFile.isEmpty()) {
+            monthlyStatement.put((i), newFile);
+            }
+        }
+        return monthlyStatement;
+    }
+
+    /**
      * Метод для сохранения всех расходов помесячно
      */
     HashMap<Integer, Double> saveMonthExpenses(HashMap<Integer, ArrayList<String[]>> monthlyReport) {
-
         HashMap<Integer, Double> monthlyExpenses = new HashMap<>();
         for (int month : monthlyReport.keySet()) {
             double expense = 0;
@@ -28,7 +44,6 @@ public class MonthlyReport {
      * Метод для сохранения всех доходов помесячно
      */
     HashMap<Integer, Double> saveMonthIncome(HashMap<Integer, ArrayList<String[]>> monthlyReport) {
-
         HashMap<Integer, Double> monthlyIncome = new HashMap<>();
         for (int month : monthlyReport.keySet()) {
             double income = 0;
