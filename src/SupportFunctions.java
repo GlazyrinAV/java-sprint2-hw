@@ -56,13 +56,14 @@ public class SupportFunctions {
      */
     static int getCommand() {
         Scanner scanner = new Scanner(System.in);
-        int userCommand;
+        String userCommand;
         try {
-            userCommand = scanner.nextInt();
-            return userCommand;
-        } catch (InputMismatchException e) {
-            System.out.println("Введн недопустимый символ. Введите число.");
-            scanner.nextLine();
+            userCommand = scanner.nextLine();
+            userCommand = userCommand.trim();
+            int command = Integer.parseInt(userCommand);
+            return command;
+        } catch (NumberFormatException e) {
+            System.out.println("Введен недопустимый символ. Введите число.");
         }
         return getCommand();
     }

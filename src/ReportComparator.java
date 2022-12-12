@@ -26,29 +26,31 @@ public class ReportComparator {
 
         boolean isExpensesCheck = false;
         boolean isIncomeCheck = false;
+        int errorExpensesCount = 0;
+        int errorIncomeCount = 0;
 
         for (int month : monthlyReport.monthExpenses.keySet()) {
-            boolean isError = false;
             if (!monthlyReport.monthExpenses.get(month).equals(yearlyReport.yearlyExpenses.get(month))) {
                 System.out.println("Обнаружена ошибка в расходах за " + (month) + " месяц");
-                isError = true;
+                errorExpensesCount++;
             }
-            if (!isError) {
+            if (errorExpensesCount == 0) {
                 isExpensesCheck = true;
             }
         }
         for (int month : monthlyReport.monthIncome.keySet()) {
-            boolean isError = false;
             if (!monthlyReport.monthIncome.get(month).equals(yearlyReport.yearlyIncome.get(month))) {
                 System.out.println("Обнаружена ошибка в доходах за " + (month) + " месяц");
-                isError = true;
+                errorIncomeCount++;
             }
-            if (!isError) {
+            if (errorIncomeCount == 0) {
                 isIncomeCheck = true;
             }
         }
         if (isExpensesCheck && isIncomeCheck) {
             System.out.println("Проверка отчетов завершена. Ошибок нет.");
+        } else {
+            System.out.println("Проверка отчетов завершена. В отчетах выявлены ошибки.");
         }
     }
 }

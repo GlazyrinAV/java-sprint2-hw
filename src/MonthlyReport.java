@@ -24,6 +24,8 @@ public class MonthlyReport {
 
     /**
      * Метод для сохранения всех расходов помесячно
+     * checkValueToBeExpense - поле, которое получает значение столбца ежемесячного отчета,
+     * отвечающего за отнесение статьи к расходам (TRUE) или доходам (FALSE)
      */
     HashMap<Integer, Double> saveMonthExpenses(HashMap<Integer, ArrayList<String[]>> monthlyReport) {
         HashMap<Integer, Double> monthlyExpenses = new HashMap<>();
@@ -32,7 +34,8 @@ public class MonthlyReport {
                 double expense = 0;
                 ArrayList<String[]> monthlyData = monthlyReport.get(month);
                 for (int i= 1; i<monthlyData.size(); i++) {
-                    if (monthlyData.get(i)[1].equals("TRUE")) {
+                    String checkValueToBeExpense = monthlyData.get(i)[1];
+                    if (checkValueToBeExpense.equals("TRUE")) {
                         expense += Double.parseDouble(monthlyData.get(i)[2]) * Double.parseDouble(monthlyData.get(i)[3]);
                     }
                     monthlyExpenses.put(month, expense);
@@ -46,6 +49,8 @@ public class MonthlyReport {
 
     /**
      * Метод для сохранения всех доходов помесячно
+     * checkValueToBeIncome - поле, которое получает значение столбца ежемесячного отчета,
+     * отвечающего за отнесение статьи к расходам (TRUE) или доходам (FALSE)
      */
     HashMap<Integer, Double> saveMonthIncome(HashMap<Integer, ArrayList<String[]>> monthlyReport) {
         HashMap<Integer, Double> monthlyIncome = new HashMap<>();
@@ -54,7 +59,8 @@ public class MonthlyReport {
                 double income = 0;
                 ArrayList<String[]> monthlyData = monthlyReport.get(month);
                 for (int i= 1; i<monthlyData.size(); i++) {
-                    if (monthlyData.get(i)[1].equals("FALSE")) {
+                    String checkValueToBeIncome = monthlyData.get(i)[1];
+                    if (checkValueToBeIncome.equals("FALSE")) {
                         income += Double.parseDouble(monthlyData.get(i)[2]) * Double.parseDouble(monthlyData.get(i)[3]);
                     }
                     monthlyIncome.put(month, income);
@@ -72,12 +78,13 @@ public class MonthlyReport {
     void printMonthReport(HashMap<Integer, ArrayList<String[]>> monthlyReport) {
         if (!monthlyReport.isEmpty()) {
             for (int month : monthlyReport.keySet()) {
-                String[] mostProfitable = findMostProfitable(monthlyReport, month);
+                String[] mostProfitable = getMostProfitable(monthlyReport, month);
                 System.out.println("Месяц " + SupportFunctions.getNameOfMonth(month));
                 System.out.println(
                         "Самый прибыльный товар: " + mostProfitable[0] +
                         "\nПрибыль составила: " + mostProfitable[1] + " рублей.");
-                getMaxExpenseReport(monthlyReport, month);
+                System.out.printf("Максимальная трата за " + SupportFunctions.getNameOfMonth(month) +
+                        " составила %.1f рублей.", getMaxExpenseReport(monthlyReport, month));
                 System.out.println("");
         }
         } else {
@@ -86,16 +93,20 @@ public class MonthlyReport {
     }
 
     /**
-     * Метод для нахождения самого прибыльного товара
+     * Метод для нахождения самого прибыльного товара. Возвращает строчный массив, в котором
+     * первое значение содержит название самой прибыльной позиции, а второе - его величину.
+     * checkValueToBeIncome - поле, которое получает значение столбца ежемесячного отчета,
+     * отвечающего за отнесение статьи к расходам (TRUE) или доходам (FALSE)
      */
-    String[] findMostProfitable(HashMap<Integer, ArrayList<String[]>> monthlyReport, int month) {
+    String[] getMostProfitable(HashMap<Integer, ArrayList<String[]>> monthlyReport, int month) {
         String nameOfMostProfitable = "";
         String valueOfMostProfitable = "0";
         if (!monthlyReport.isEmpty()) {
         ArrayList<String[]> monthlyData = monthlyReport.get(month);
         for (int i= 0; i<monthlyData.size(); i++) {
             String[] currentData = monthlyData.get(i);
-            if (currentData[1].equals("FALSE")) {
+            String checkValueToBeIncome = currentData[1];
+            if (checkValueToBeIncome.equals("FALSE")) {
                 Double expense = Double.parseDouble(currentData[2]) * Double.parseDouble(currentData[3]);
                 if (Double.parseDouble(valueOfMostProfitable) < expense) {
                     nameOfMostProfitable = currentData[0];
@@ -113,24 +124,27 @@ public class MonthlyReport {
     }
 
     /**
-     * Метод для поиска самой большой траты
+     * Метод для поиска самой большой траты. Возвращает значение максимальной траты в выбранном месяце.
+     * checkValueToBeExpense - поле, которое получает значение столбца ежемесячного отчета,
+     * отвечающего за отнесение статьи к расходам (TRUE) или доходам (FALSE)
      */
-    void getMaxExpenseReport(HashMap<Integer, ArrayList<String[]>> monthlyReport, Integer month) {
-        if (!monthlyReport.isEmpty()) {
+    double getMaxExpenseReport(HashMap<Integer, ArrayList<String[]>> monthlyReport, Integer month) {
         double maxExpense = 0;
-        ArrayList<String[]> monthlyData = monthlyReport.get(month);
-        for (int i= 0; i<monthlyData.size(); i++) {
-            String[] currentData = monthlyData.get(i);
-            if (currentData[1].equals("TRUE")) {
-                double expense = Double.parseDouble(currentData[2]) * Double.parseDouble(currentData[3]);
-                if (maxExpense < expense) {
-                    maxExpense = expense;
+        if (!monthlyReport.isEmpty()) {
+            ArrayList<String[]> monthlyData = monthlyReport.get(month);
+            for (int i= 0; i<monthlyData.size(); i++) {
+                String[] currentData = monthlyData.get(i);
+                String checkValueToBeExpense = currentData[1];
+                if (checkValueToBeExpense.equals("TRUE")) {
+                    double expense = Double.parseDouble(currentData[2]) * Double.parseDouble(currentData[3]);
+                    if (maxExpense < expense) {
+                        maxExpense = expense;
+                    }
                 }
             }
-        }
-        System.out.printf("Максимальная трата за " + SupportFunctions.getNameOfMonth(month) +  " составила %.1f рублей.", maxExpense);
         } else {
             System.out.println("Помесячный отчет пуст.");
         }
+        return maxExpense;
     }
 }

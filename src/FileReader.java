@@ -34,7 +34,8 @@ public class FileReader {
         try {
             return Files.readAllLines(Path.of(path));
         } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно файл не находится в нужной директории.");
+            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно файл не находится в нужной директории." +
+                    "\nПроверьте наличие файла и повторите попытку.");
             return Collections.emptyList();
         }
     }

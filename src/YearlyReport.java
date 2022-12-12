@@ -24,6 +24,8 @@ public class YearlyReport {
 
     /**
      * Метод для сохранения всех расходов помесячно
+     * checkValueToBeExpense - поле, которое получает значение столбца ежемесячного отчета,
+     * отвечающего за отнесение статьи к расходам (true) или доходам (false)
      */
     HashMap<Integer, Double> saveYearlyExpenses(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
         HashMap<Integer, Double> yearlyExpenses = new HashMap<>();
@@ -32,7 +34,8 @@ public class YearlyReport {
                 double expense = 0;
                 ArrayList<String[]> yearlyData = yearlyReport.get(year);
                 for (int i= 1; i<yearlyData.size(); i++) {
-                    if ((yearlyData.get(i))[2].equals("true")) {
+                    String checkValueToBeExpense = yearlyData.get(i)[2];
+                    if (checkValueToBeExpense.equals("true")) {
                         expense = Double.parseDouble(yearlyData.get(i)[1]);
                     }
                     yearlyExpenses.put(Integer.parseInt(yearlyData.get(i)[0]), expense);
@@ -46,6 +49,8 @@ public class YearlyReport {
 
     /**
      * Метод для сохранения всех доходов помесячно
+     * checkValueToBeIncome - поле, которое получает значение столбца ежемесячного отчета,
+     * отвечающего за отнесение статьи к расходам (true) или доходам (false)
      */
     HashMap<Integer, Double> saveYearlyIncome(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
         HashMap<Integer, Double> yearlyIncome = new HashMap<>();
@@ -54,7 +59,8 @@ public class YearlyReport {
                 double income = 0;
                 ArrayList<String[]> yearlyData = yearlyReport.get(year);
                 for (int i= 1; i<yearlyData.size(); i++) {
-                    if (yearlyData.get(i)[2].equals("false")) {
+                    String checkValueToBeIncome = yearlyData.get(i)[2];
+                    if (checkValueToBeIncome.equals("false")) {
                         income = Double.parseDouble(yearlyData.get(i)[1]);
                     }
                     yearlyIncome.put(Integer.parseInt(yearlyData.get(i)[0]), income);
@@ -73,7 +79,10 @@ public class YearlyReport {
         if (!yearlyReport.isEmpty()) {
             for (int year : yearlyReport.keySet()) {
                 System.out.println(year);
-                printNetProfitByMonth(yearlyReport);
+                for (int i = 1; i < getAvailableMonths(yearlyReport); i++) {
+                System.out.println("Чистая прибыль за " + SupportFunctions.getNameOfMonth(i) + " составила: "
+                        + getNetProfitByMonth(yearlyReport, i) + " рублей.");
+                }
                 System.out.printf("\nСредние доходы составили: %.1f рублей.", getAverage(saveYearlyIncome(yearlyReport)));
                 System.out.printf("\nСредние расходы составили: %.1f рублей.\n", getAverage(saveYearlyExpenses(yearlyReport)));
             }
@@ -83,24 +92,27 @@ public class YearlyReport {
     }
 
     /**
-     * Метод для сохранения прибыли
+     * Метод для сохранения прибыли. Возвращает разницу между доходами и расходами
+     * income - поле, получающее значение доходов за месяц
+     * expense - поле, получающее значение расходов за месяц
      */
-    void printNetProfitByMonth(HashMap<Integer, ArrayList<String[]>> yearlyReport) {
+    double getNetProfitByMonth(HashMap<Integer, ArrayList<String[]>> yearlyReport, int month) {
+        double netProfit = 0;
         if (!yearlyReport.isEmpty()) {
-            double netProfit = 0;
             HashMap<Integer, Double> expenseData = saveYearlyExpenses(yearlyReport);
             HashMap<Integer, Double> incomeData = saveYearlyIncome(yearlyReport);
-            for (int i = 1; i <= expenseData.size(); i++) {
-                netProfit = incomeData.get(i) - expenseData.get(i);
-                System.out.println("Чистая прибыль за " + SupportFunctions.getNameOfMonth(i) + " составила: " + netProfit + " рублей.");
-            }
+            double income = incomeData.get(month);
+            double expense = expenseData.get(month);
+            netProfit = income - expense;
         } else {
             System.out.println("Ежегодный отчет пуст.");
         }
+        return netProfit;
     }
 
     /**
-     * Метод для поиска средних доходов или расходов
+     * Метод для поиска средних значений
+     * Возвращает среднее значение
      */
     double getAverage(HashMap<Integer, Double> data) {
         double average;
@@ -110,5 +122,16 @@ public class YearlyReport {
         }
         average = sum / (data.size()-1);
         return average;
+    }
+
+    /**
+     * Метод для поиска допустимого количества месяцев (т.е. наличие строк как расходов, так и доходов)
+     * в ежегодном отчете. Возвращает значение количества месяцев.
+     */
+    int getAvailableMonths (HashMap<Integer, ArrayList<String[]>> yearlyReport) {
+        HashMap<Integer, Double> expenseData = saveYearlyExpenses(yearlyReport);
+        HashMap<Integer, Double> incomeData = saveYearlyIncome(yearlyReport);
+        int availableMonths = Integer.min(expenseData.size(), incomeData.size());
+        return availableMonths;
     }
 }
